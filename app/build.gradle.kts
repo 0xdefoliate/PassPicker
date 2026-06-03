@@ -10,23 +10,28 @@ plugins {
 }
 
 val keyStorePropertiesFile = rootProject.file("keystore.properties")
+val useKeyStoreProperties = keyStorePropertiesFile.canRead()
 val keyStoreProperties = Properties()
 
-keyStoreProperties.load(FileInputStream(keyStorePropertiesFile))
+if (useKeyStoreProperties) {
+    keyStoreProperties.load(FileInputStream(keyStorePropertiesFile))
+}
 
 android {
+    if (useKeyStoreProperties) {
+        signingConfigs {
+            create("config") {
+                keyAlias = keyStoreProperties["keyAlias"] as String
+                keyPassword = keyStoreProperties["keyPassword"] as String
+                storeFile = file(keyStoreProperties["storeFile"] as String)
+                storePassword = keyStoreProperties["storePassword"] as String
+            }
+        }
+    }
     namespace = "se.axelkarlsson.passpicker"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
-        }
-    }
-    signingConfigs {
-        create("config") {
-            keyAlias = keyStoreProperties["keyAlias"] as String
-            keyPassword = keyStoreProperties["keyPassword"] as String
-            storeFile = file(keyStoreProperties["storeFile"] as String)
-            storePassword = keyStoreProperties["storePassword"] as String
         }
     }
     defaultConfig {
@@ -37,11 +42,16 @@ android {
         versionName = "0.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        signingConfig = signingConfigs.getByName("debug")
     }
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+        }
+
         release {
-            signingConfig = signingConfigs.getByName("config")
+            if (useKeyStoreProperties) {
+                signingConfig = signingConfigs.getByName("config")
+            }
             optimization {
                 isMinifyEnabled = true
                 isShrinkResources = true
