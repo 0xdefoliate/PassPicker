@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -6,6 +9,11 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+val keyStorePropertiesFile = rootProject.file("keystore.properties")
+val keyStoreProperties = Properties()
+
+keyStoreProperties.load(FileInputStream(keyStorePropertiesFile))
+
 android {
     namespace = "se.axelkarlsson.passpicker"
     compileSdk {
@@ -13,7 +21,14 @@ android {
             minorApiLevel = 1
         }
     }
-
+    signingConfigs {
+        create("config") {
+            keyAlias = keyStoreProperties["keyAlias"] as String
+            keyPassword = keyStoreProperties["keyPassword"] as String
+            storeFile = file(keyStoreProperties["storeFile"] as String)
+            storePassword = keyStoreProperties["storePassword"] as String
+        }
+    }
     defaultConfig {
         applicationId = "se.axelkarlsson.passpicker"
         minSdk = 33
@@ -22,10 +37,11 @@ android {
         versionName = "0.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig = signingConfigs.getByName("debug")
     }
-
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("config")
             optimization {
                 isMinifyEnabled = true
                 isShrinkResources = true
