@@ -12,14 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CheckboxRow(checked: MutableState<Boolean>, label: String) {
+fun CheckboxRow(checked: Boolean, onCheck: (Boolean) -> Unit, label: String) {
     Row(
         modifier = Modifier
-            .clickable { checked.value = !checked.value }
+            .clickable { onCheck(!checked) }
             .padding(end = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(checked = checked.value, onCheckedChange = { checked.value = it })
+        Checkbox(checked = checked, onCheckedChange = onCheck)
         Text(label)
     }
 }
