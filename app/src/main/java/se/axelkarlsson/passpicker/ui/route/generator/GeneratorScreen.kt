@@ -51,7 +51,7 @@ private fun GeneratePasswordFloatingActionButton(onClick: () -> Unit) {
 }
 
 @Composable
-private fun GeneratedPasswordRow(password: String) {
+private fun GeneratedPasswordRow(password: String, onCopyPassword: () -> Unit) {
     Row(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(16.dp))
@@ -59,7 +59,8 @@ private fun GeneratedPasswordRow(password: String) {
             .background(color = MaterialTheme.colorScheme.surfaceContainer)
             .combinedClickable(onClick = {}, onLongClick = {}),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween) {
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         Text(
             modifier = Modifier
                 .weight(1f)
@@ -80,7 +81,7 @@ private fun GeneratedPasswordRow(password: String) {
                 )
             }
 
-            IconButton(onClick = {}) {
+            IconButton(onClick = onCopyPassword) {
                 Icon(
                     painter = painterResource(R.drawable.content_copy_24px),
                     contentDescription = "Copy Generated Password"
@@ -110,7 +111,7 @@ fun GeneratorScreen(
     Column(
         modifier = Modifier.padding(28.dp)
     ) {
-        GeneratedPasswordRow(generated)
+        GeneratedPasswordRow(generated, { viewModel.onCopyPassword() })
 
         Column(modifier = Modifier.padding(top = 16.dp)) {
             Text("Options", fontSize = 20.sp)

@@ -1,8 +1,14 @@
 package se.axelkarlsson.passpicker.ui.route.generator
 
+import android.content.ClipData
+import android.content.ClipDescription
+import android.content.ClipboardManager
+import android.content.Context
+import android.os.PersistableBundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -12,7 +18,13 @@ import javax.inject.Inject
 import kotlin.math.max
 
 @HiltViewModel
-class GeneratorViewModel @Inject constructor() : ViewModel() {
+class GeneratorViewModel @Inject constructor(
+    @ApplicationContext private val context: Context
+) : ViewModel() {
+
+    private val clipboard: ClipboardManager =
+        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
     val minimum: Int = 6
     val maximum: Int = 64
 
@@ -72,6 +84,17 @@ class GeneratorViewModel @Inject constructor() : ViewModel() {
     fun onSliderValueChanged(value: Float) {
         this.length.value = value
         generate()
+    }
+
+    fun onCopyPassword() {
+        val data = ClipData.newPlainText("Password", generated.value)
+        data.apply {
+            description.extras = PersistableBundle().apply {
+                putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true)
+            }
+        }
+
+        clipboard.setPrimaryClip(data)
     }
 
     fun generate() {
