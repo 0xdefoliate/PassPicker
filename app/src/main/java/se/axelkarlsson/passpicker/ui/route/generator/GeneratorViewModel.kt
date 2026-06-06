@@ -29,6 +29,9 @@ class GeneratorViewModel @Inject constructor(
     val maximum: Int = 64
 
     val generated = MutableStateFlow("")
+
+    val visible = MutableStateFlow(false)
+
     val length = MutableStateFlow(max(minimum.toFloat(), 32f))
     val options = MutableStateFlow(
         mapOf<String, PasswordGenerator.Option?>(
@@ -95,6 +98,10 @@ class GeneratorViewModel @Inject constructor(
         }
 
         clipboard.setPrimaryClip(data)
+    }
+
+    fun onPasswordVisibilityToggled() {
+        visible.value = !visible.value
     }
 
     fun generate() {
