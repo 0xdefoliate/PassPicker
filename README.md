@@ -30,5 +30,5 @@ The generator derives passwords from Android's [`SecureRandom` API](https://deve
 Security efforts has also been put into the UI and UX.
 
 Examples:
-* Generated passwords are hidden by default to defer shoulder-surfing risks.
+* Generated passwords are hidden by default to deter shoulder-surfing risks.
 * When a password is copied, they get hidden from the clipboard preview present in Android 13 and above.
