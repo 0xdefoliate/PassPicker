@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,7 +54,7 @@ private fun GeneratePasswordFloatingActionButton(onClick: () -> Unit) {
 @Composable
 private fun GeneratedPasswordRow(
     password: String, onCopyPassword: () -> Unit, onPasswordVisibilityToggled: () -> Unit,
-    passwordVisibilityIcon: @Composable () -> Unit
+    passwordVisible: Boolean
 ) {
     Row(
         modifier = Modifier
@@ -68,17 +69,40 @@ private fun GeneratedPasswordRow(
             modifier = Modifier
                 .weight(1f)
                 .padding(start = 8.dp),
-            text = password,
+            text = if (passwordVisible) {
+                password
+            } else {
+                var str = ""
+                for (i in 1..password.length) str += "*"
+
+                str
+            },
             fontFamily = FontFamily.Monospace,
             overflow = TextOverflow.Ellipsis,
-            maxLines = 1
+            maxLines = 1,
+            fontWeight = if (passwordVisible) {
+                FontWeight.Normal
+            } else {
+                FontWeight.Bold
+            }
         )
 
         Row(
             modifier = Modifier.wrapContentWidth()
         ) {
             IconButton(onClick = onPasswordVisibilityToggled) {
-                passwordVisibilityIcon()
+                if (passwordVisible) {
+                    Icon(
+                        painter = painterResource(R.drawable.visibility_off_24px),
+                        contentDescription = "Hide Password"
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(R.drawable.visibility_24px),
+                        contentDescription = "Show Password"
+                    )
+                }
+
             }
 
             IconButton(onClick = onCopyPassword) {
@@ -114,23 +138,11 @@ fun GeneratorScreen(
         modifier = Modifier.padding(28.dp)
     ) {
         GeneratedPasswordRow(
-            if (passwordVisible) {
-                generated
-            } else {
-                "****"
-            },
+            generated,
             { viewModel.onCopyPassword() },
             { viewModel.onPasswordVisibilityToggled() },
-            @Composable {
-                Icon(
-                    painter = if (passwordVisible) {
-                        painterResource(R.drawable.visibility_off_24px)
-                    } else {
-                        painterResource(R.drawable.visibility_24px)
-                    },
-                    contentDescription = "Toggle Password Visibility"
-                )
-            })
+            passwordVisible
+        )
 
         Column(modifier = Modifier.padding(top = 16.dp)) {
             Text("Options", fontSize = 20.sp)
