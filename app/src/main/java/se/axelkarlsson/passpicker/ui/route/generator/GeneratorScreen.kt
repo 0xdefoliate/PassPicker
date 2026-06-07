@@ -2,6 +2,8 @@ package se.axelkarlsson.passpicker.ui.route.generator
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -128,14 +133,17 @@ fun GeneratorScreen(
     val useNumeric by viewModel.useNumeric.collectAsStateWithLifecycle()
     val useSpecial by viewModel.useSpecial.collectAsStateWithLifecycle()
 
+    val scroll = rememberScrollState()
+
     LaunchedEffect(Unit) {
         viewModel.generate()
     }
 
-    GeneratePasswordFloatingActionButton({ viewModel.generate() })
-
     Column(
-        modifier = Modifier.padding(28.dp)
+        modifier = Modifier
+            .padding(28.dp)
+            .verticalScroll(scroll)
+
     ) {
         GeneratedPasswordRow(
             generated,
@@ -175,4 +183,6 @@ fun GeneratorScreen(
             )
         }
     }
+
+    GeneratePasswordFloatingActionButton({ viewModel.generate() })
 }
