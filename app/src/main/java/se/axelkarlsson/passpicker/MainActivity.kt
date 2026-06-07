@@ -1,5 +1,6 @@
 package se.axelkarlsson.passpicker
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -55,6 +56,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val orientation = resources.configuration.orientation
+
         // We don't draw any complex things behind the navigation bar.
         // So, we set this to improve UX where the colour of the tab bar is used.
         enableEdgeToEdge(
@@ -64,7 +67,9 @@ class MainActivity : ComponentActivity() {
             )
         )
 
-        window.isNavigationBarContrastEnforced = false
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            window.isNavigationBarContrastEnforced = false
+        }
 
         setContent {
             ContentView(tabs)
