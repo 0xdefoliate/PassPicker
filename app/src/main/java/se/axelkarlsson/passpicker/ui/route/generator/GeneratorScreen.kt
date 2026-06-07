@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -128,14 +130,17 @@ fun GeneratorScreen(
     val useNumeric by viewModel.useNumeric.collectAsStateWithLifecycle()
     val useSpecial by viewModel.useSpecial.collectAsStateWithLifecycle()
 
+    val scroll = rememberScrollState()
+
     LaunchedEffect(Unit) {
         viewModel.generate()
     }
 
-    GeneratePasswordFloatingActionButton({ viewModel.generate() })
-
     Column(
-        modifier = Modifier.padding(28.dp)
+        modifier = Modifier
+            .padding(28.dp)
+            .verticalScroll(scroll)
+
     ) {
         GeneratedPasswordRow(
             generated,
@@ -175,4 +180,6 @@ fun GeneratorScreen(
             )
         }
     }
+
+    GeneratePasswordFloatingActionButton({ viewModel.generate() })
 }
