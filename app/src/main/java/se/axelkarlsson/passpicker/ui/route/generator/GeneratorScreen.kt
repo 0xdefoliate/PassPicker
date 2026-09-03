@@ -153,14 +153,15 @@ fun GeneratorScreen(
             Text("Options", fontSize = 20.sp)
 
             Column(modifier = Modifier.padding(top = 16.dp)) {
-                Text("Password Length (${passwordLength.value.roundToInt()})")
+                Text("Password Length (${passwordLength.value})")
 
                 Slider(
-                    value = passwordLength.value,
+                    value = passwordLength.value.toFloat(),
                     valueRange = viewModel.minimum.toFloat()..viewModel.maximum.toFloat(),
                     onValueChange = {
                         viewModel.onSliderValueChanged(it)
-                    })
+                    }
+                )
             }
 
             CheckboxRow(
