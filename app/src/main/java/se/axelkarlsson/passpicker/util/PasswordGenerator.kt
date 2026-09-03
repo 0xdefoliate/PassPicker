@@ -32,7 +32,7 @@ private val ALPHABET = listOf(
 )
 
 private val SPECIAL_CHARACTERS = listOf(
-    '!', '@', '#', '$', '%', '&', '?', '*'
+    '!', '@', '#', '$', '%', '&', '?', '*', '-', '_', ';', '+', '/'
 )
 
 object SecureRNG {
@@ -108,4 +108,3 @@ class PasswordGenerator {
         return password
     }
 }
-
