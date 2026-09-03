@@ -30,14 +30,14 @@ android {
     }
     namespace = "se.axelkarlsson.passpicker"
     compileSdk {
-        version = release(36) {
+        version = release(37) {
             minorApiLevel = 1
         }
     }
     defaultConfig {
         applicationId = "se.axelkarlsson.passpicker"
         minSdk = 33
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 3
         versionName = "1.1.0"
 
