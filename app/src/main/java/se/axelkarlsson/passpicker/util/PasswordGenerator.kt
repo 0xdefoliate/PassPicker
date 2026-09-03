@@ -90,7 +90,7 @@ class PasswordGenerator {
     fun generate(
         min: Int, length: Int, options: List<Option>
     ): String {
-        var password: String = ""
+        var password = ""
 
         for (i in 1..length) {
             val choice = SecureRNG.choice(options)
