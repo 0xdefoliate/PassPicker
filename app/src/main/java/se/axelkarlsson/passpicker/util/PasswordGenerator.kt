@@ -63,7 +63,15 @@ class PasswordGenerator {
 
     object Alphabetic : Option {
         override fun random(): Char {
-            return SecureRNG.choice(ALPHABET)
+            val character = SecureRNG.choice(ALPHABET)
+
+            // Choose uppercase 50% of the time
+            if (SecureRNG.randInt(2) < 1) {
+                return character.uppercaseChar()
+            }
+
+            return character
+
         }
     }
 
