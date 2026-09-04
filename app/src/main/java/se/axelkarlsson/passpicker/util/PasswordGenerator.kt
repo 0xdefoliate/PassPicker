@@ -32,7 +32,7 @@ private val ALPHABET = listOf(
 )
 
 private val SPECIAL_CHARACTERS = listOf(
-    '!', '@', '#', '$', '%', '&', '?', '*'
+    '!', '@', '#', '$', '%', '&', '?', '*', '-', '_', ';', '+', '/'
 )
 
 object SecureRNG {
@@ -63,7 +63,15 @@ class PasswordGenerator {
 
     object Alphabetic : Option {
         override fun random(): Char {
-            return SecureRNG.choice(ALPHABET)
+            val character = SecureRNG.choice(ALPHABET)
+
+            // Choose uppercase 50% of the time
+            if (SecureRNG.randInt(2) < 1) {
+                return character.uppercaseChar()
+            }
+
+            return character
+
         }
     }
 
@@ -82,7 +90,7 @@ class PasswordGenerator {
     fun generate(
         min: Int, length: Int, options: List<Option>
     ): String {
-        var password: String = ""
+        var password = ""
 
         for (i in 1..length) {
             val choice = SecureRNG.choice(options)
@@ -100,4 +108,3 @@ class PasswordGenerator {
         return password
     }
 }
-

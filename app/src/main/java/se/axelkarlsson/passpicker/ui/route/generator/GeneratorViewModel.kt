@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.stateIn
 import se.axelkarlsson.passpicker.util.PasswordGenerator
 import javax.inject.Inject
 import kotlin.math.max
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class GeneratorViewModel @Inject constructor(
@@ -32,7 +33,7 @@ class GeneratorViewModel @Inject constructor(
 
     val visible = MutableStateFlow(false)
 
-    val length = MutableStateFlow(max(minimum.toFloat(), 32f))
+    val length = MutableStateFlow(max(minimum, 32))
     val options = MutableStateFlow(
         mapOf<String, PasswordGenerator.Option?>(
             "alpha" to PasswordGenerator.Alphabetic,
@@ -85,7 +86,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     fun onSliderValueChanged(value: Float) {
-        this.length.value = value
+        this.length.value = value.roundToInt()
         generate()
     }
 
@@ -115,6 +116,6 @@ class GeneratorViewModel @Inject constructor(
         }
 
         generated.value =
-            generator.generate(minimum, length.value.toInt(), mapped)
+            generator.generate(minimum, length.value, mapped)
     }
 }

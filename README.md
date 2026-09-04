@@ -11,8 +11,12 @@ First off, before you use the app, please verify the APK with the excellent [App
 Otherwise, someone may have tampered with it if you aren't careful!
 
 ```
-se.axelkarlsson.passpicker F0:0A:73:F7:71:F3:02:60:2D:26:F7:48:B1:23:1B:4F:3E:CE:42:FB:4F:CF:11:79:3E:ED:55:FE:55:1C:69:A3
+se.axelkarlsson.passpicker 20:8A:DA:16:25:FD:A9:AE:96:FC:8D:04:3B:20:64:DE:AF:57:B4:88:38:7B:15:45:CC:8C:9D:10:D2:28:6F:D9
 ```
+
+**NOTE:**
+The signing keys were updated in `v1.2.0`, but if you want to verify older versions, please check the commit history of this file.
+Please understand that the older signing keys were not compromised, and they were only rotated because I accidentally deleted them.
 
 ### Algorithm
 
